@@ -1,0 +1,9 @@
+https://static.juniora.org
+https://librechat.juniora.org
+https://vc2.juniora.org
+https://www.juniora.org
+https://karamoon.juniora.org
+https://wikimoon.juniora.org
+https://testgah.juniora.org
+https://mattermost.juniora.org
+http://gozar.juniora.org
