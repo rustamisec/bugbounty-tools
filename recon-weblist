@@ -32,7 +32,7 @@ if [ -z "$DOMAIN" ]; then
 fi
 
 # Create results directory for the target
-RESULTS_DIR="$HOME/bugbounty/$DOMAIN/results"
+RESULTS_DIR="$HOME/Desktop/$DOMAIN-results"
 mkdir -p $RESULTS_DIR
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 
