@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # ==================================================
-#            Recon Script v3.0
-#      Created by: Hossein Rostami 
+#            Recon Script v4.0
+#        Subdomain + Live Host + Port Scan
+#              By: RostamiSec
 # ==================================================
-
 
 # Color Variables
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 # ASCII Art Banner
 echo -e "${RED}"
@@ -31,8 +31,8 @@ if [ -z "$DOMAIN" ]; then
     exit 1
 fi
 
-# Create results directory
-RESULTS_DIR="results"
+# Create results directory for the target
+RESULTS_DIR="$HOME/bugbounty/$DOMAIN/results"
 mkdir -p $RESULTS_DIR
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 
@@ -40,16 +40,22 @@ echo -e "\n${BLUE}===============================================${NC}"
 echo -e "${GREEN}[+] Starting reconnaissance on: ${YELLOW}$DOMAIN${NC}"
 echo -e "${BLUE}===============================================${NC}\n"
 
-# Phase 1: Subdomain Enumeration
+# --- Phase 1: Subdomain Enumeration ---
 echo -e "${YELLOW}[*] Phase 1: Finding subdomains with subfinder...${NC}"
 SUBDOMAINS_FILE="$RESULTS_DIR/subdomains_$TIMESTAMP.txt"
 subfinder -d $DOMAIN -silent -o $SUBDOMAINS_FILE
 echo -e "${GREEN}[+] Subdomains saved to: ${YELLOW}$SUBDOMAINS_FILE${NC}"
 
-# Phase 2: Probing for Live HTTP/HTTPS Servers
+# --- Phase 2: Probing for Live HTTP/HTTPS Servers ---
 echo -e "\n${YELLOW}[*] Phase 2: Probing for live sites with httpx...${NC}"
 LIVE_SITES_FILE="$RESULTS_DIR/live_sites_$TIMESTAMP.txt"
 cat $SUBDOMAINS_FILE | httpx -silent -o $LIVE_SITES_FILE
 echo -e "${GREEN}[+] Live sites saved to: ${YELLOW}$LIVE_SITES_FILE${NC}"
+
+# --- Phase 3: Port Scanning on Live Hosts (NEW!) ---
+echo -e "\n${YELLOW}[*] Phase 3: Scanning top 1000 ports with Nmap...${NC}"
+PORTSCAN_FILE="$RESULTS_DIR/portscan_$TIMESTAMP.txt"
+cat $LIVE_SITES_FILE | awk -F/ '{print $3}' | nmap -iL - -T4 -oN $PORTSCAN_FILE
+echo -e "${GREEN}[+] Nmap port scan results saved to: ${YELLOW}$PORTSCAN_FILE${NC}"
 
 echo -e "\n${GREEN}✅ Reconnaissance Complete!${NC}"
