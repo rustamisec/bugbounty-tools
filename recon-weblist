@@ -37,7 +37,8 @@ if [ -z "$DOMAIN" ]; then
 fi
 
 
-RESULTS_DIR="$OUTPUT_DIR/$DOMAIN-$(date +%F)"
+
+RESULTS_DIR=$OUTPUT_DIR
 mkdir -p $RESULTS_DIR
 TIMESTAMP=$(date +"%H-%M-%S")
 
